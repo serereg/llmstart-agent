@@ -35,7 +35,7 @@ Sprint считается завершённым, когда:
 |---|--------|--------|------|---------|
 | 01 | backend-scaffold | ✅ | [plan](tasks/01-backend-scaffold/plan.md) | [summary](tasks/01-backend-scaffold/summary.md) |
 | 02 | config-and-health | ✅ | [plan](tasks/02-config-and-health/plan.md) | [summary](tasks/02-config-and-health/summary.md) |
-| 03 | api-auth | 📋 | [plan](tasks/03-api-auth/plan.md) | — |
+| 03 | api-auth | ✅ | [plan](tasks/03-api-auth/plan.md) | [summary](tasks/03-api-auth/summary.md) |
 | 04 | session-store | 📋 | [plan](tasks/04-session-store/plan.md) | — |
 | 05 | chat-api | 📋 | [plan](tasks/05-chat-api/plan.md) | — |
 | 06 | react-agent-skeleton | 📋 | [plan](tasks/06-react-agent-skeleton/plan.md) | — |
@@ -135,7 +135,7 @@ Fail-fast конфигурация из env и эндпоинт `GET /health` с
 
 ---
 
-## Задача 03: api-auth 📋
+## Задача 03: api-auth ✅
 
 ### Цель
 
@@ -145,12 +145,12 @@ Bearer-аутентификация для всех эндпоинтов `/api/v
 
 ### Состав работ
 
-- [ ] Реализовать FastAPI dependency `verify_api_key` (Bearer token)
-- [ ] Подключить dependency к роутеру `/api/v1`
-- [ ] Обеспечить 401 с `{"detail": "Invalid or missing API key"}`
-- [ ] Убедиться, что `/health` остаётся без auth
-- [ ] Integration-тесты: valid key → pass; missing/invalid → 401
-- [ ] Самопроверка по критериям DoD
+- [x] Реализовать FastAPI dependency `verify_api_key` (Bearer token)
+- [x] Подключить dependency к роутеру `/api/v1`
+- [x] Обеспечить 401 с `{"detail": "Invalid or missing API key"}`
+- [x] Убедиться, что `/health` остаётся без auth
+- [x] Integration-тесты: valid key → pass; missing/invalid → 401
+- [x] Самопроверка по критериям DoD
 
 ### Критерии готовности (DoD)
 

@@ -15,14 +15,14 @@ Bearer-аутентификация для всех эндпоинтов `/api/v
 
 ## Состав работ
 
-- [ ] Реализовать `verify_api_key` dependency в `app/api/deps.py`
-- [ ] Парсинг заголовка `Authorization: Bearer <token>`
-- [ ] Сравнение с `settings.backend_api_key` (constant-time compare)
-- [ ] HTTP 401 + `{"detail": "Invalid or missing API key"}` при ошибке
-- [ ] Подключить dependency к APIRouter с prefix `/api/v1`
-- [ ] Заглушка protected endpoint для тестирования (или использовать будущий sessions/chat)
-- [ ] Integration-тесты: missing header, wrong token, valid token
-- [ ] Самопроверка по критериям DoD
+- [x] Реализовать `verify_api_key` dependency в `app/api/deps.py`
+- [x] Парсинг заголовка `Authorization: Bearer <token>`
+- [x] Сравнение с `settings.backend_api_key` (constant-time compare)
+- [x] HTTP 401 + `{"detail": "Invalid or missing API key"}` при ошибке
+- [x] Подключить dependency к APIRouter с prefix `/api/v1`
+- [x] Заглушка protected endpoint для тестирования (или использовать будущий sessions/chat)
+- [x] Integration-тесты: missing header, wrong token, valid token
+- [x] Самопроверка по критериям DoD
 
 ---
 
