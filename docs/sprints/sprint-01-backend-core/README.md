@@ -36,7 +36,7 @@ Sprint считается завершённым, когда:
 | 01 | backend-scaffold | ✅ | [plan](tasks/01-backend-scaffold/plan.md) | [summary](tasks/01-backend-scaffold/summary.md) |
 | 02 | config-and-health | ✅ | [plan](tasks/02-config-and-health/plan.md) | [summary](tasks/02-config-and-health/summary.md) |
 | 03 | api-auth | ✅ | [plan](tasks/03-api-auth/plan.md) | [summary](tasks/03-api-auth/summary.md) |
-| 04 | session-store | 📋 | [plan](tasks/04-session-store/plan.md) | — |
+| 04 | session-store | ✅ | [plan](tasks/04-session-store/plan.md) | [summary](tasks/04-session-store/summary.md) |
 | 05 | chat-api | 📋 | [plan](tasks/05-chat-api/plan.md) | — |
 | 06 | react-agent-skeleton | 📋 | [plan](tasks/06-react-agent-skeleton/plan.md) | — |
 
@@ -179,7 +179,7 @@ Bearer-аутентификация для всех эндпоинтов `/api/v
 
 ---
 
-## Задача 04: session-store 📋
+## Задача 04: session-store ✅
 
 ### Цель
 
@@ -189,12 +189,12 @@ In-memory хранилище сессий и эндпоинт `GET /api/v1/sessi
 
 ### Состав работ
 
-- [ ] Реализовать модели Session (id, messages, channel, segment, payment, timestamps)
-- [ ] Реализовать `SessionStore` — thread-safe in-memory dict
-- [ ] Реализовать `GET /api/v1/sessions/{session_id}` по api-contracts.md
-- [ ] Pydantic-схемы запроса/ответа
-- [ ] Unit-тесты store; integration-тест GET sessions (404 / 200)
-- [ ] Самопроверка по критериям DoD
+- [x] Реализовать модели Session (id, messages, channel, segment, payment, timestamps)
+- [x] Реализовать `SessionStore` — thread-safe in-memory dict
+- [x] Реализовать `GET /api/v1/sessions/{session_id}` по api-contracts.md
+- [x] Pydantic-схемы запроса/ответа
+- [x] Unit-тесты store; integration-тест GET sessions (404 / 200)
+- [x] Самопроверка по критериям DoD
 
 ### Критерии готовности (DoD)
 
@@ -215,6 +215,7 @@ In-memory хранилище сессий и эндпоинт `GET /api/v1/sessi
 - `backend/app/sessions/models.py`
 - `backend/app/sessions/store.py`
 - `backend/app/api/sessions.py`
+- `backend/app/api/schemas/session.py`
 - `backend/tests/test_sessions.py`
 
 ### Документы
