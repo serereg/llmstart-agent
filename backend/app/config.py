@@ -1,20 +1,26 @@
 """Application configuration loaded from environment variables."""
 
+import os
 from functools import lru_cache
+from pathlib import Path
 from typing import Literal
 
+from dotenv import load_dotenv
 from pydantic import Field, ValidationError
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 APP_VERSION = "0.1.0"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+ENV_FILE = REPO_ROOT / ".env"
+
+if not os.environ.get("PYTEST_CURRENT_TEST"):
+    load_dotenv(ENV_FILE)
 
 
 class Settings(BaseSettings):
     """Backend settings — fail fast when required env vars are missing."""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
         extra="ignore",
         populate_by_name=True,
     )
