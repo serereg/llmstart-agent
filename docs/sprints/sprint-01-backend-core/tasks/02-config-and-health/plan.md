@@ -15,15 +15,15 @@ Fail-fast конфигурация из переменных окружения 
 
 ## Состав работ
 
-- [ ] Реализовать `Settings` в `app/config.py` (pydantic-settings): все env из integrations.md
-- [ ] Fail fast при старте: отсутствие обязательных переменных → понятная ошибка с именем переменной
-- [ ] Singleton/get_settings dependency для DI
-- [ ] Создать `.env.example` в корне репозитория со всеми переменными и комментариями
-- [ ] Реализовать `GET /health` в `app/api/health.py` (без auth)
-- [ ] Async probes: OpenAI (models list или lightweight call), Langfuse (health/ping endpoint)
-- [ ] Ответ 200 `status: ok` / 503 `status: degraded` по api-contracts.md
-- [ ] Тесты: mock probes ok/degraded; config validation
-- [ ] Самопроверка по критериям DoD
+- [x] Реализовать `Settings` в `app/config.py` (pydantic-settings): все env из integrations.md
+- [x] Fail fast при старте: отсутствие обязательных переменных → понятная ошибка с именем переменной
+- [x] Singleton/get_settings dependency для DI
+- [x] Создать `.env.example` в корне репозитория со всеми переменными и комментариями
+- [x] Реализовать `GET /health` в `app/api/health.py` (без auth)
+- [x] Async probes: OpenAI (models list или lightweight call), Langfuse (health/ping endpoint)
+- [x] Ответ 200 `status: ok` / 503 `status: degraded` по api-contracts.md
+- [x] Тесты: mock probes ok/degraded; config validation
+- [x] Самопроверка по критериям DoD
 
 ---
 

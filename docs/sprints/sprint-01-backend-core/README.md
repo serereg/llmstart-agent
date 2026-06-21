@@ -34,7 +34,7 @@ Sprint считается завершённым, когда:
 | # | Задача | Статус | Plan | Summary |
 |---|--------|--------|------|---------|
 | 01 | backend-scaffold | ✅ | [plan](tasks/01-backend-scaffold/plan.md) | [summary](tasks/01-backend-scaffold/summary.md) |
-| 02 | config-and-health | 📋 | [plan](tasks/02-config-and-health/plan.md) | — |
+| 02 | config-and-health | ✅ | [plan](tasks/02-config-and-health/plan.md) | [summary](tasks/02-config-and-health/summary.md) |
 | 03 | api-auth | 📋 | [plan](tasks/03-api-auth/plan.md) | — |
 | 04 | session-store | 📋 | [plan](tasks/04-session-store/plan.md) | — |
 | 05 | chat-api | 📋 | [plan](tasks/05-chat-api/plan.md) | — |
@@ -89,7 +89,7 @@ Sprint считается завершённым, когда:
 
 ---
 
-## Задача 02: config-and-health 📋
+## Задача 02: config-and-health ✅
 
 ### Цель
 
@@ -99,12 +99,12 @@ Fail-fast конфигурация из env и эндпоинт `GET /health` с
 
 ### Состав работ
 
-- [ ] Реализовать `app/config.py` (Pydantic Settings): обязательные env из [integrations.md](../../concept/integrations.md)
-- [ ] Создать `.env.example` в корне репозитория
-- [ ] Реализовать `GET /health` по [api-contracts.md](../../concept/api-contracts.md) (без auth)
-- [ ] Добавить probes OpenAI и Langfuse (async, timeout)
-- [ ] Тесты health: 200 ok / 503 degraded
-- [ ] Самопроверка по критериям DoD
+- [x] Реализовать `app/config.py` (Pydantic Settings): обязательные env из [integrations.md](../../concept/integrations.md)
+- [x] Создать `.env.example` в корне репозитория
+- [x] Реализовать `GET /health` по [api-contracts.md](../../concept/api-contracts.md) (без auth)
+- [x] Добавить probes OpenAI и Langfuse (async, timeout)
+- [x] Тесты health: 200 ok / 503 degraded
+- [x] Самопроверка по критериям DoD
 
 ### Критерии готовности (DoD)
 

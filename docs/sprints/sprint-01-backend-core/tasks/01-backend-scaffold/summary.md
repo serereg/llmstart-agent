@@ -11,7 +11,7 @@
 - `backend/uv.lock` — зафиксированные версии зависимостей (создаётся `uv sync`)
 - `backend/app/main.py` — FastAPI app с lifespan, CORS placeholder (`localhost:3000`), подключение `api_router`
 - `backend/app/api/router.py` — пустой `APIRouter` (агрегатор для будущих роутеров)
-- `backend/app/config.py` — заглушка для task 02
+- `backend/app/config.py` — заглушка (на момент закрытия task 01; реализован в task 02)
 - `backend/app/__init__.py`, `backend/app/api/__init__.py` — пакетная структура
 - `Makefile` — цели `dev-backend`, `lint`, `format`, `typecheck`, `test`, `test-backend`, `ci`
 - `backend/tests/conftest.py` — fixture `TestClient`
