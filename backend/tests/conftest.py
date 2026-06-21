@@ -3,6 +3,7 @@ from collections.abc import Generator
 import pytest
 from fastapi.testclient import TestClient
 
+from app.agent.core import get_agent_service
 from app.config import get_settings
 
 TEST_ENV = {
@@ -18,8 +19,10 @@ def test_env(monkeypatch: pytest.MonkeyPatch) -> Generator[None, None, None]:
     for key, value in TEST_ENV.items():
         monkeypatch.setenv(key, value)
     get_settings.cache_clear()
+    get_agent_service.cache_clear()
     yield
     get_settings.cache_clear()
+    get_agent_service.cache_clear()
 
 
 @pytest.fixture

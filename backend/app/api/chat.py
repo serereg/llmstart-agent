@@ -9,6 +9,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
 
+from app.agent.core import AgentService, get_agent_service
+from app.agent.prompts import HANDOFF_USER_MESSAGE
 from app.api.schemas.chat import ChatRequest, ChatResponse
 from app.api.sse import stream_sse_events
 from app.sessions.models import Channel, Message, MessageRole, Session
@@ -16,7 +18,6 @@ from app.sessions.store import SessionStore, get_session_store
 
 router = APIRouter(tags=["chat"])
 
-STUB_REPLY = "Stub response from LLMStart Agent."
 HANDOFF_PATTERN = re.compile(
     r"^/start session_([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$",
     re.IGNORECASE,
@@ -67,36 +68,15 @@ async def resolve_session(
     return session, False
 
 
-async def persist_exchange(
+async def save_user_message(
     store: SessionStore,
-    session: Session,
-    user_message: str,
-    *,
-    skip_user_message: bool,
+    session_id: UUID,
+    content: str,
 ) -> Session:
-    """Save user and assistant stub messages to session history."""
-    session_id = session.session_id
-    now = datetime.now(UTC)
-
-    if not skip_user_message:
-        updated = await store.add_message(
-            session_id,
-            Message(role=MessageRole.USER, content=user_message, timestamp=now),
-        )
-        if updated is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Session not found",
-            )
-        session = updated
-
+    """Persist a user message and return the updated session."""
     updated = await store.add_message(
         session_id,
-        Message(
-            role=MessageRole.ASSISTANT,
-            content=STUB_REPLY,
-            timestamp=datetime.now(UTC),
-        ),
+        Message(role=MessageRole.USER, content=content, timestamp=datetime.now(UTC)),
     )
     if updated is None:
         raise HTTPException(
@@ -106,19 +86,49 @@ async def persist_exchange(
     return updated
 
 
-async def stub_done_events(
+async def save_assistant_message(
+    store: SessionStore,
     session_id: UUID,
-    reply: str,
-) -> AsyncIterator[tuple[str, dict[str, object]]]:
-    """Yield stub SSE events — only `done` until ReAct agent is wired in task 06."""
-    yield (
-        "done",
-        {
-            "session_id": str(session_id),
-            "reply": reply,
-            "error": False,
-        },
+    content: str,
+) -> Session:
+    """Persist an assistant message and return the updated session."""
+    updated = await store.add_message(
+        session_id,
+        Message(role=MessageRole.ASSISTANT, content=content, timestamp=datetime.now(UTC)),
     )
+    if updated is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Session not found",
+        )
+    return updated
+
+
+def agent_history(session: Session, *, is_handoff: bool) -> list[Message]:
+    """Return message history passed to the agent (excludes the latest user turn)."""
+    if is_handoff:
+        return list(session.messages)
+    if not session.messages:
+        return []
+    return list(session.messages[:-1])
+
+
+async def agent_sse_with_persist(
+    agent: AgentService,
+    store: SessionStore,
+    session: Session,
+    user_message: str,
+    history: list[Message],
+) -> AsyncIterator[tuple[str, dict[str, object]]]:
+    """Stream agent SSE events and persist the assistant reply on completion."""
+    reply = ""
+    async for event_type, data in agent.stream_sse(user_message, history, session.session_id):
+        if event_type == "done":
+            reply = str(data["reply"])
+        yield event_type, data
+
+    if reply:
+        await save_assistant_message(store, session.session_id, reply)
 
 
 @router.post("/chat", response_model=None)
@@ -126,23 +136,34 @@ async def chat(
     body: ChatRequest,
     request: Request,
     store: Annotated[SessionStore, Depends(get_session_store)],
+    agent: Annotated[AgentService, Depends(get_agent_service)],
 ) -> ChatResponse | StreamingResponse:
     """Handle chat message: SSE stream for web, JSON for telegram."""
     session, is_handoff = await resolve_session(store, body)
-    session = await persist_exchange(
-        store,
-        session,
-        body.message,
-        skip_user_message=is_handoff,
-    )
+
+    if is_handoff:
+        user_message = HANDOFF_USER_MESSAGE
+        history = agent_history(session, is_handoff=True)
+    else:
+        session = await save_user_message(store, session.session_id, body.message)
+        user_message = body.message
+        history = agent_history(session, is_handoff=False)
 
     if body.channel == "telegram":
-        return ChatResponse(session_id=session.session_id, reply=STUB_REPLY)
+        result = await agent.invoke(user_message, history)
+        await save_assistant_message(store, session.session_id, result.reply)
+        return ChatResponse(
+            session_id=session.session_id,
+            reply=result.reply,
+            error=result.error,
+        )
 
     async def sse_with_disconnect() -> AsyncIterator[str]:
         if await request.is_disconnected():
             return
-        async for chunk in stream_sse_events(stub_done_events(session.session_id, STUB_REPLY)):
+        async for chunk in stream_sse_events(
+            agent_sse_with_persist(agent, store, session, user_message, history),
+        ):
             if await request.is_disconnected():
                 break
             yield chunk

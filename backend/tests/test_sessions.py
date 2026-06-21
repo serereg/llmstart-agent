@@ -1,5 +1,6 @@
 """Tests for in-memory session store and GET /api/v1/sessions/{session_id}."""
 
+from collections.abc import Generator
 from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
@@ -18,7 +19,7 @@ def store() -> SessionStore:
 
 
 @pytest.fixture
-def client_with_store(store: SessionStore) -> TestClient:
+def client_with_store(store: SessionStore) -> Generator[TestClient, None, None]:
     from app.main import create_app  # noqa: PLC0415
 
     app = create_app()
