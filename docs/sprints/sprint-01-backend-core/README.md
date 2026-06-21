@@ -2,7 +2,7 @@
 
 > **Версия roadmap:** v0.1 — MVP
 > **Roadmap:** [../../roadmap.md](../../roadmap.md)
-> **Статус:** 📋 Planned
+> **Статус:** 🚧 In Progress
 > **Открыт:** 2026-06-21
 > **Закрыт:** —
 
@@ -33,7 +33,7 @@ Sprint считается завершённым, когда:
 
 | # | Задача | Статус | Plan | Summary |
 |---|--------|--------|------|---------|
-| 01 | backend-scaffold | 📋 | [plan](tasks/01-backend-scaffold/plan.md) | — |
+| 01 | backend-scaffold | ✅ | [plan](tasks/01-backend-scaffold/plan.md) | [summary](tasks/01-backend-scaffold/summary.md) |
 | 02 | config-and-health | 📋 | [plan](tasks/02-config-and-health/plan.md) | — |
 | 03 | api-auth | 📋 | [plan](tasks/03-api-auth/plan.md) | — |
 | 04 | session-store | 📋 | [plan](tasks/04-session-store/plan.md) | — |
@@ -42,7 +42,7 @@ Sprint считается завершённым, когда:
 
 ---
 
-## Задача 01: backend-scaffold 📋
+## Задача 01: backend-scaffold ✅
 
 ### Цель
 
@@ -52,12 +52,12 @@ Sprint считается завершённым, когда:
 
 ### Состав работ
 
-- [ ] Инициализировать `backend/` через uv (Python 3.12+, FastAPI, uvicorn, pydantic-settings, httpx, pytest)
-- [ ] Создать структуру каталогов по [architecture.md](../../concept/architecture.md)
-- [ ] Добавить корневой `Makefile` с целями `dev-backend`, `lint`, `format`, `typecheck`, `test`, `test-backend`, `ci`
-- [ ] Реализовать `app/main.py` с lifespan и подключением роутера
-- [ ] Добавить smoke-тест `GET /` или app startup
-- [ ] Самопроверка по критериям DoD
+- [x] Инициализировать `backend/` через uv (Python 3.12+, FastAPI, uvicorn, pydantic-settings, httpx, pytest)
+- [x] Создать структуру каталогов по [architecture.md](../../concept/architecture.md)
+- [x] Добавить корневой `Makefile` с целями `dev-backend`, `lint`, `format`, `typecheck`, `test`, `test-backend`, `ci`
+- [x] Реализовать `app/main.py` с lifespan и подключением роутера
+- [x] Добавить smoke-тест `GET /` или app startup
+- [x] Самопроверка по критериям DoD
 
 ### Критерии готовности (DoD)
 
