@@ -30,6 +30,8 @@ class Settings(BaseSettings):
     langfuse_secret_key: str = Field(alias="LANGFUSE_SECRET_KEY")
     backend_api_key: str = Field(alias="BACKEND_API_KEY")
 
+    openai_api_base: str | None = Field(default=None, alias="OPENAI_API_BASE")
+    openai_api_version: str = Field(default="2024-02-01", alias="OPENAI_API_VERSION")
     openai_model: str = Field(default="gpt-4o", alias="OPENAI_MODEL")
     openai_embedding_model: str = Field(
         default="text-embedding-3-small",

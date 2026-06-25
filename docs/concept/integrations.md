@@ -34,26 +34,37 @@
 
 ## 2. Внешние системы
 
-### OpenAI API
+### LLM API (OpenAI и Azure-совместимые endpoints)
 
-[Документация](https://platform.openai.com/docs)
+Backend поддерживает два режима подключения к LLM и embeddings:
+
+| Режим | Условие | Клиент LangChain |
+|-------|---------|------------------|
+| **OpenAI** (по умолчанию) | `OPENAI_API_BASE` не задан | `ChatOpenAI` → `api.openai.com` |
+| **Azure-совместимый** | `OPENAI_API_BASE` задан | `AzureChatOpenAI` → кастомный endpoint |
+
+[Документация OpenAI](https://platform.openai.com/docs) · [Azure OpenAI](https://learn.microsoft.com/en-us/azure/ai-services/openai/)
 
 | Параметр | Значение |
 |----------|---------|
 | Назначение | LLM (ReAct-агент) и embeddings (RAG) |
-| Направление | Out (backend → OpenAI) |
-| Протокол | HTTPS REST |
+| Направление | Out (backend → LLM provider) |
+| Протокол | HTTPS REST (OpenAI Chat Completions / Azure OpenAI API) |
 | Критичность | **MVP — обязательна** |
-| Timeout | 60 сек на запрос |
+| Timeout | 60 сек на запрос (`OPENAI_TIMEOUT_SEC`) |
 
-**Модели:**
+**Модели** (задаются через `.env`, см. `.env.example`):
 
-| Задача | Модель |
-|--------|--------|
-| ReAct-агент | `gpt-4o` |
-| RAG embeddings | `text-embedding-3-small` |
+| Задача | OpenAI (default) | Azure-совместимый (пример) |
+|--------|------------------|----------------------------|
+| ReAct-агент | `gpt-4o` | deployment name провайдера (напр. `claude-sonnet-4@20250514`) |
+| RAG embeddings | `text-embedding-3-small` | deployment name провайдера (напр. `text-embedding-3-small-1`) |
 
 **Подключение:** LangChain OpenAI integration (`langchain-openai`). Backend вызывает Chat Completions для agent loop и Embeddings API при индексации/retrieval Chroma.
+
+**Health probe:** `GET /health` проверяет доступность LLM API:
+- без `OPENAI_API_BASE` — `GET https://api.openai.com/v1/models` с `Authorization: Bearer`
+- с `OPENAI_API_BASE` — `GET {OPENAI_API_BASE}/openai/models` с заголовком `api-key`
 
 **Поведение при ошибке:** backend возвращает клиенту fallback-сообщение «Сервис временно недоступен, попробуйте позже» (не HTTP 503 на уровне transport для SSE; для JSON-ответа — тело с сообщением об ошибке). Ошибка логируется на уровне `ERROR` с `exc_info=True`; тело запроса и тексты диалогов не логируются.
 
@@ -121,7 +132,7 @@ graph LR
     FE["frontend<br/>:3000"]
     BOT["bot<br/>aiogram"]
     BE["backend<br/>Agent Core :8000"]
-    OAI["OpenAI API<br/>gpt-4o + embeddings"]
+    OAI["LLM API<br/>chat + embeddings"]
     LF["Langfuse<br/>:3001"]
     TG["Telegram API"]
     FILES["data/<br/>b2b, b2c, leads.txt"]
@@ -145,9 +156,11 @@ graph LR
 
 | Переменная | Компонент | Обязательна | Описание |
 |------------|-----------|-------------|----------|
-| `OPENAI_API_KEY` | backend | да | API-ключ OpenAI |
-| `OPENAI_MODEL` | backend | нет | Default: `gpt-4o` |
-| `OPENAI_EMBEDDING_MODEL` | backend | нет | Default: `text-embedding-3-small` |
+| `OPENAI_API_KEY` | backend | да | API-ключ LLM-провайдера |
+| `OPENAI_API_BASE` | backend | нет | Azure-совместимый endpoint (без `/openai` суффикса); если не задан — `api.openai.com` |
+| `OPENAI_API_VERSION` | backend | нет | API version для Azure-режима; default: `2024-02-01` |
+| `OPENAI_MODEL` | backend | нет | Модель или deployment name; default: `gpt-4o` |
+| `OPENAI_EMBEDDING_MODEL` | backend | нет | Embedding deployment; default: `text-embedding-3-small` |
 | `OPENAI_TIMEOUT_SEC` | backend | нет | Default: `60` |
 | `LANGFUSE_PUBLIC_KEY` | backend | да | Public key Langfuse |
 | `LANGFUSE_SECRET_KEY` | backend | да | Secret key Langfuse |
@@ -167,14 +180,14 @@ Config-класс backend падает с понятной ошибкой при
 
 | Интеграция | Риск | Митигация |
 |-----------|------|----------|
-| **OpenAI API** | Недоступность / rate limit | Timeout 60s; fallback-сообщение пользователю; логирование ошибки |
-| **OpenAI API** | Стоимость (gpt-4o + embeddings) | Traces в Langfuse (tokens/cost); лимит сообщений в dev-режиме |
+| **LLM API** | Недоступность / rate limit | Timeout 60s; fallback-сообщение пользователю; логирование ошибки |
+| **LLM API** | Стоимость (chat + embeddings) | Traces в Langfuse (tokens/cost); лимит сообщений в dev-режиме |
 | **Langfuse** | Недоступность | Обязателен для MVP — docker-compose healthcheck; fail fast при старте backend |
 | **Telegram API** | Недоступность backend | Bot отвечает «сервис недоступен»; retry long polling |
 | **In-memory sessions** | Потеря при рестарте | Документировано; Postgres в roadmap ([ADR-0002](../adrs/0002-in-memory-sessions.md)) |
 | **Мок-платежи** | Нет реальной оплаты | Осознанное ограничение MVP; roadmap |
 
-**Критичны для MVP:** OpenAI API, Langfuse, backend API. Telegram API — критичен для Telegram-канала; web-канал работает без него.
+**Критичны для MVP:** LLM API, Langfuse, backend API. Telegram API — критичен для Telegram-канала; web-канал работает без него.
 
 ---
 

@@ -9,7 +9,7 @@ from uuid import UUID
 from langchain.agents import create_agent
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage, AIMessageChunk, BaseMessage, HumanMessage
-from langchain_openai import ChatOpenAI
+from langchain_openai import AzureChatOpenAI, ChatOpenAI
 from openai import APIConnectionError, APIError, APITimeoutError, RateLimitError
 
 from app.agent.prompts import SYSTEM_PROMPT
@@ -133,23 +133,31 @@ def create_agent_service(llm: BaseChatModel) -> AgentService:
     return AgentService(llm)
 
 
+def _build_chat_model(settings: Settings) -> BaseChatModel:
+    """Create a chat model for OpenAI or Azure-compatible endpoints."""
+    common_kwargs = {
+        "api_key": settings.openai_api_key,
+        "timeout": settings.openai_timeout_sec,
+    }
+    if settings.openai_api_base:
+        return AzureChatOpenAI(
+            azure_endpoint=settings.openai_api_base.rstrip("/"),
+            api_version=settings.openai_api_version,
+            azure_deployment=settings.openai_model,
+            **common_kwargs,
+        )
+    return ChatOpenAI(
+        model=settings.openai_model,
+        **common_kwargs,
+    )
+
+
 @lru_cache
 def get_agent_service() -> AgentService:
     """Return the process-wide agent service singleton."""
-    settings = get_settings()
-    llm = ChatOpenAI(
-        api_key=settings.openai_api_key,
-        model=settings.openai_model,
-        timeout=settings.openai_timeout_sec,
-    )
-    return create_agent_service(llm)
+    return create_agent_service(_build_chat_model(get_settings()))
 
 
 def build_agent_service(settings: Settings) -> AgentService:
     """Create an agent service from explicit settings (used in tests)."""
-    llm = ChatOpenAI(
-        api_key=settings.openai_api_key,
-        model=settings.openai_model,
-        timeout=settings.openai_timeout_sec,
-    )
-    return create_agent_service(llm)
+    return create_agent_service(_build_chat_model(settings))

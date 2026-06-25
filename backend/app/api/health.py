@@ -20,6 +20,7 @@ HealthStatus = Literal["ok", "degraded"]
 
 HEALTH_PROBE_TIMEOUT_SEC = 5.0
 OPENAI_MODELS_URL = "https://api.openai.com/v1/models"
+DIAL_MODELS_PATH = "/openai/models"
 LANGFUSE_HEALTH_PATH = "/api/public/health"
 
 
@@ -34,14 +35,20 @@ class HealthResponse(BaseModel):
     dependencies: DependenciesStatus
 
 
+def _openai_models_probe(settings: Settings) -> tuple[str, dict[str, str]]:
+    if settings.openai_api_base:
+        url = f"{settings.openai_api_base.rstrip('/')}{DIAL_MODELS_PATH}"
+        headers = {"api-key": settings.openai_api_key}
+        return url, headers
+    return OPENAI_MODELS_URL, {"Authorization": f"Bearer {settings.openai_api_key}"}
+
+
 async def probe_openai(settings: Settings) -> ProbeStatus:
     """Lightweight OpenAI check via models list (no token usage)."""
+    url, headers = _openai_models_probe(settings)
     try:
         async with httpx.AsyncClient(timeout=HEALTH_PROBE_TIMEOUT_SEC) as client:
-            response = await client.get(
-                OPENAI_MODELS_URL,
-                headers={"Authorization": f"Bearer {settings.openai_api_key}"},
-            )
+            response = await client.get(url, headers=headers)
             if response.status_code == httpx.codes.OK:
                 return "ok"
     except httpx.HTTPError:

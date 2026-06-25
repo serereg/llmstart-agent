@@ -67,7 +67,7 @@ Sprint считается завершённым, когда:
 
 ### 2. RAG — Chroma in-memory
 
-- [ ] `app/rag/indexer.py` — загрузка PDF/MD, chunking, embeddings (OpenAI `text-embedding-3-small`)
+- [ ] `app/rag/indexer.py` — загрузка PDF/MD, chunking, embeddings (`OPENAI_EMBEDDING_MODEL`)
 - [ ] `app/rag/retriever.py` — similarity_search с filter `audience: b2b | b2c`
 - [ ] Startup hook в lifespan: rebuild index при каждом старте backend
 - [ ] Unit-тесты indexer/retriever с mock embeddings
@@ -138,7 +138,7 @@ Sprint считается завершённым, когда:
 |-------------|--------|
 | Backend scaffold, config, auth, sessions, chat API, ReAct skeleton | Sprint 01 |
 | Langfuse running locally | `make up` (docker-compose — sprint-04; до этого manual docker) |
-| OpenAI API key | `.env` |
+| LLM API credentials | `.env` (`OPENAI_API_KEY`, при необходимости `OPENAI_API_BASE`) |
 | Concept docs, ADRs | `docs/concept/`, `docs/adrs/` |
 
 ---
@@ -148,7 +148,7 @@ Sprint считается завершённым, когда:
 | Риск | Митигация |
 |------|-----------|
 | Chroma in-memory — индекс пересобирается при каждом рестарте | Допустимо для MVP; startup hook |
-| OpenAI embeddings cost | Минимальный seed data; кеш embeddings в dev |
+| Embeddings API cost | Минимальный seed data; кеш embeddings в dev |
 | LangChain tool calling API changes | Pin versions в uv.lock |
 | Segment detection качество | Явные инструкции в system prompt; улучшение в sprint-05 guardrails |
 
@@ -187,7 +187,7 @@ backend/tests/
 - [architecture.md](../../concept/architecture.md) — RAG flow, tools list
 - [api-contracts.md](../../concept/api-contracts.md) — SSE tool events
 - [user-scenarios.md](../../concept/user-scenarios.md) — B2C/B2B flows
-- [integrations.md](../../concept/integrations.md) — OpenAI, Langfuse
+- [integrations.md](../../concept/integrations.md) — LLM API, Langfuse
 - [ADR-0001](../../adrs/0001-react-agent-core.md), [ADR-0003](../../adrs/0003-mock-payments-crm.md)
 
 ---

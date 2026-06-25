@@ -373,7 +373,7 @@ Frontend (`http://localhost:3000`) → backend (`http://localhost:8000`). Backen
 
 ### Переменные окружения
 
-Секреты — только через `.env` (не в репо). Шаблон — `.env.example`. Обязательные: `OPENAI_API_KEY`, `TELEGRAM_BOT_TOKEN`, Langfuse keys.
+Секреты — только через `.env` (не в репо). Шаблон — `.env.example`. Обязательные: `OPENAI_API_KEY`, `TELEGRAM_BOT_TOKEN`, Langfuse keys. Для Azure-совместимого LLM endpoint — также `OPENAI_API_BASE` и deployment names в `OPENAI_MODEL` / `OPENAI_EMBEDDING_MODEL` (см. [integrations.md](integrations.md)).
 
 ---
 
