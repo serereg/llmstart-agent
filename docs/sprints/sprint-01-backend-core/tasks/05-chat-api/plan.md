@@ -15,16 +15,16 @@
 
 ## Состав работ
 
-- [ ] Pydantic-схемы: ChatRequest (session_id, message, channel), ChatResponse (telegram)
-- [ ] Валидация: message required, max 4000 chars, channel ∈ {web, telegram}
-- [ ] Session lifecycle: null session_id → create; unknown id → 404
-- [ ] Handoff: парсинг `/start session_{uuid}` в message для channel=telegram
-- [ ] Ветка `channel=telegram`: JSON 200 `{session_id, reply}` со stub reply
-- [ ] Ветка `channel=web`: SSE `text/event-stream`, минимум event `done` со stub
-- [ ] Заготовка SSE helper: emit `event:` / `data:` JSON
-- [ ] Сохранение user message в session (assistant — stub)
-- [ ] Integration-тесты: SSE parsing, JSON response, validation errors, 401
-- [ ] Самопроверка по критериям DoD
+- [x] Pydantic-схемы: ChatRequest (session_id, message, channel), ChatResponse (telegram)
+- [x] Валидация: message required, max 4000 chars, channel ∈ {web, telegram}
+- [x] Session lifecycle: null session_id → create; unknown id → 404
+- [x] Handoff: парсинг `/start session_{uuid}` в message для channel=telegram
+- [x] Ветка `channel=telegram`: JSON 200 `{session_id, reply}` со stub reply
+- [x] Ветка `channel=web`: SSE `text/event-stream`, минимум event `done` со stub
+- [x] Заготовка SSE helper: emit `event:` / `data:` JSON
+- [x] Сохранение user message в session (assistant — stub)
+- [x] Integration-тесты: SSE parsing, JSON response, validation errors, 401
+- [x] Самопроверка по критериям DoD
 
 ---
 
@@ -72,4 +72,4 @@
 
 ## Открытые вопросы
 
-- [ ] Нет — SSE event types зафиксированы в api-contracts.md
+- [x] Нет — SSE event types зафиксированы в api-contracts.md

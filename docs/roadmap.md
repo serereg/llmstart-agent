@@ -39,7 +39,7 @@
 
 | # | Sprint | Цель | Статус | Документ |
 |---|--------|------|--------|----------|
-| 01 | backend-core | FastAPI, config, sessions, health, auth, ReAct skeleton | 📋 | [sprint-01](sprints/sprint-01-backend-core/README.md) |
+| 01 | backend-core | FastAPI, config, sessions, health, auth, ReAct skeleton | ✅ | [sprint-01](sprints/sprint-01-backend-core/README.md) |
 | 02 | agent-rag | Tools, RAG (Chroma), Langfuse, воронка (products, payment, leads) | 📋 | [sprint-02](sprints/sprint-02-agent-rag/README.md) |
 | 03 | web-widget | Next.js, SSE, reasoning/tools UI, Telegram handoff | 📋 | [sprint-03](sprints/sprint-03-web-widget/README.md) |
 | 04 | telegram-bot | aiogram, long polling, handoff, docker-compose, E2E | 📋 | [sprint-04](sprints/sprint-04-telegram-bot/README.md) |

@@ -2,9 +2,9 @@
 
 > **Версия roadmap:** v0.1 — MVP
 > **Roadmap:** [../../roadmap.md](../../roadmap.md)
-> **Статус:** 🚧 In Progress
+> **Статус:** ✅ Done
 > **Открыт:** 2026-06-21
-> **Закрыт:** —
+> **Закрыт:** 2026-06-21
 
 ---
 
@@ -37,7 +37,7 @@ Sprint считается завершённым, когда:
 | 02 | config-and-health | ✅ | [plan](tasks/02-config-and-health/plan.md) | [summary](tasks/02-config-and-health/summary.md) |
 | 03 | api-auth | ✅ | [plan](tasks/03-api-auth/plan.md) | [summary](tasks/03-api-auth/summary.md) |
 | 04 | session-store | ✅ | [plan](tasks/04-session-store/plan.md) | [summary](tasks/04-session-store/summary.md) |
-| 05 | chat-api | 📋 | [plan](tasks/05-chat-api/plan.md) | — |
+| 05 | chat-api | ✅ | [plan](tasks/05-chat-api/plan.md) | [summary](tasks/05-chat-api/summary.md) |
 | 06 | react-agent-skeleton | ✅ | [plan](tasks/06-react-agent-skeleton/plan.md) | [summary](tasks/06-react-agent-skeleton/summary.md) |
 
 ---
@@ -225,7 +225,7 @@ In-memory хранилище сессий и эндпоинт `GET /api/v1/sessi
 
 ---
 
-## Задача 05: chat-api 📋
+## Задача 05: chat-api ✅
 
 ### Цель
 
@@ -235,14 +235,14 @@ In-memory хранилище сессий и эндпоинт `GET /api/v1/sessi
 
 ### Состав работ
 
-- [ ] Pydantic-схемы ChatRequest / ChatResponse по api-contracts.md
-- [ ] Логика создания сессии при `session_id=null` и 404 при unknown id
-- [ ] Ветвление по `channel`: web → SSE, telegram → JSON
-- [ ] SSE-формат: события `done` (stub reply); заготовка под reasoning/token
-- [ ] Парсинг handoff `/start session_{uuid}` для telegram channel
-- [ ] Валидация: message required, max 4000, channel enum
-- [ ] Integration-тесты SSE и JSON
-- [ ] Самопроверка по критериям DoD
+- [x] Pydantic-схемы ChatRequest / ChatResponse по api-contracts.md
+- [x] Логика создания сессии при `session_id=null` и 404 при unknown id
+- [x] Ветвление по `channel`: web → SSE, telegram → JSON
+- [x] SSE-формат: события `done` (stub reply); заготовка под reasoning/token
+- [x] Парсинг handoff `/start session_{uuid}` для telegram channel
+- [x] Валидация: message required, max 4000, channel enum
+- [x] Integration-тесты SSE и JSON
+- [x] Самопроверка по критериям DoD
 
 ### Критерии готовности (DoD)
 
@@ -322,4 +322,12 @@ LangChain ReAct-агент (без business tools) подключён к chat AP
 
 ## Итог (заполняется после закрытия)
 
-—
+Backend Agent Core готов к интеграции с frontend и bot:
+
+- FastAPI-сервис с fail-fast конфигом, Bearer auth, health probes
+- In-memory сессии с `GET /api/v1/sessions/{id}`
+- `POST /api/v1/chat`: web → SSE (`reasoning`, `token`, `done`), telegram → JSON
+- LangChain ReAct skeleton (`tools=[]`) с OpenAI и fallback при ошибках
+- `make ci` — 39 тестов, lint + mypy green
+
+**Следующий спринт:** [sprint-02-agent-rag](../sprint-02-agent-rag/README.md) — business tools, RAG, Langfuse.
