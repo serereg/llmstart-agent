@@ -15,16 +15,16 @@ LangChain ReAct-агент (без business tools) подключён к `POST /
 
 ## Состав работ
 
-- [ ] Добавить зависимости: langchain, langchain-openai, langchain-core
-- [ ] Реализовать `app/agent/prompts.py` — system prompt LLMStart Agent (консультант llmstart.ru)
-- [ ] Реализовать `app/agent/core.py` — create_agent / AgentExecutor с пустым tools list
-- [ ] Callback/hook для SSE: reasoning steps, token streaming
-- [ ] Интегрировать agent в chat endpoint: заменить stub reply
-- [ ] Web: SSE events `reasoning`, `token`, `done`; Telegram: JSON final reply
-- [ ] OpenAI error handling: fallback «Сервис временно недоступен...», `error: true`
-- [ ] Persist user + assistant messages в Session после invoke
-- [ ] Тесты с mock LLM (pytest); не требовать реальный API key в CI
-- [ ] Самопроверка по критериям DoD
+- [x] Добавить зависимости: langchain, langchain-openai, langchain-core
+- [x] Реализовать `app/agent/prompts.py` — system prompt LLMStart Agent (консультант llmstart.ru)
+- [x] Реализовать `app/agent/core.py` — create_agent / AgentExecutor с пустым tools list
+- [x] Callback/hook для SSE: reasoning steps, token streaming
+- [x] Интегрировать agent в chat endpoint: заменить stub reply
+- [x] Web: SSE events `reasoning`, `token`, `done`; Telegram: JSON final reply
+- [x] OpenAI error handling: fallback «Сервис временно недоступен...», `error: true`
+- [x] Persist user + assistant messages в Session после invoke
+- [x] Тесты с mock LLM (pytest); не требовать реальный API key в CI
+- [x] Самопроверка по критериям DoD
 
 ---
 
@@ -73,4 +73,4 @@ LangChain ReAct-агент (без business tools) подключён к `POST /
 
 ## Открытые вопросы
 
-- [ ] Streaming: token-by-token vs single chunk — выбрать при реализации, зафиксировать в summary
+- [x] Streaming: token-by-token vs single chunk — выбрать при реализации, зафиксировать в summary

@@ -38,7 +38,7 @@ Sprint считается завершённым, когда:
 | 03 | api-auth | ✅ | [plan](tasks/03-api-auth/plan.md) | [summary](tasks/03-api-auth/summary.md) |
 | 04 | session-store | ✅ | [plan](tasks/04-session-store/plan.md) | [summary](tasks/04-session-store/summary.md) |
 | 05 | chat-api | 📋 | [plan](tasks/05-chat-api/plan.md) | — |
-| 06 | react-agent-skeleton | 📋 | [plan](tasks/06-react-agent-skeleton/plan.md) | — |
+| 06 | react-agent-skeleton | ✅ | [plan](tasks/06-react-agent-skeleton/plan.md) | [summary](tasks/06-react-agent-skeleton/summary.md) |
 
 ---
 
@@ -272,7 +272,7 @@ In-memory хранилище сессий и эндпоинт `GET /api/v1/sessi
 
 ---
 
-## Задача 06: react-agent-skeleton 📋
+## Задача 06: react-agent-skeleton ✅
 
 ### Цель
 
@@ -282,13 +282,13 @@ LangChain ReAct-агент (без business tools) подключён к chat AP
 
 ### Состав работ
 
-- [ ] Реализовать `app/agent/core.py` — ReAct agent с пустым/минимальным toolset
-- [ ] Реализовать `app/agent/prompts.py` — system prompt LLMStart Agent
-- [ ] Интегрировать agent invoke в chat endpoint (web SSE + telegram JSON)
-- [ ] Стриминг SSE: `reasoning`, `token`, `done`; fallback при ошибке OpenAI
-- [ ] Сохранение user/assistant messages в Session
-- [ ] Mock OpenAI в тестах; smoke с реальным ключом — manual
-- [ ] Самопроверка по критериям DoD
+- [x] Реализовать `app/agent/core.py` — ReAct agent с пустым/минимальным toolset
+- [x] Реализовать `app/agent/prompts.py` — system prompt LLMStart Agent
+- [x] Интегрировать agent invoke в chat endpoint (web SSE + telegram JSON)
+- [x] Стриминг SSE: `reasoning`, `token`, `done`; fallback при ошибке OpenAI
+- [x] Сохранение user/assistant messages в Session
+- [x] Mock OpenAI в тестах; smoke с реальным ключом — manual
+- [x] Самопроверка по критериям DoD
 
 ### Критерии готовности (DoD)
 
