@@ -2,9 +2,9 @@
 
 > **Версия roadmap:** v0.1 — MVP
 > **Roadmap:** [../../roadmap.md](../../roadmap.md)
-> **Статус:** 📋 Planned
-> **Открыт:** —
-> **Закрыт:** —
+> **Статус:** ✅ Done
+> **Открыт:** 2026-06-22
+> **Закрыт:** 2026-06-26
 
 ---
 
@@ -58,77 +58,77 @@ Sprint считается завершённым, когда:
 
 ### 1. Knowledge base и seed data
 
-- [ ] Создать `data/b2b/`, `data/b2c/` с seed MD/PDF (минимум 2–3 документа на audience)
-- [ ] Создать `data/b2c/products.json` — каталог продуктов для `list_b2c_products`
-- [ ] Создать `data/leads.txt` (пустой) + `.gitkeep` если нужно
-- [ ] Документировать формат products в summary спринта
+- [x] Создать `data/b2b/`, `data/b2c/` с seed MD/PDF (минимум 2–3 документа на audience)
+- [x] Создать `data/b2c/products.json` — каталог продуктов для `list_b2c_products`
+- [x] Создать `data/leads.txt` (пустой) + `.gitkeep` если нужно
+- [x] Документировать формат products в summary спринта
 
 > 💡 **Скиллы:** `python-design-patterns`
 
 ### 2. RAG — Chroma in-memory
 
-- [ ] `app/rag/indexer.py` — загрузка PDF/MD, chunking, embeddings (`OPENAI_EMBEDDING_MODEL`)
-- [ ] `app/rag/retriever.py` — similarity_search с filter `audience: b2b | b2c`
-- [ ] Startup hook в lifespan: rebuild index при каждом старте backend
-- [ ] Unit-тесты indexer/retriever с mock embeddings
+- [x] `app/rag/indexer.py` — загрузка PDF/MD, chunking, embeddings (`OPENAI_EMBEDDING_MODEL`)
+- [x] `app/rag/retriever.py` — similarity_search с filter `audience: b2b | b2c`
+- [x] Startup hook в lifespan: rebuild index при каждом старте backend
+- [x] Unit-тесты indexer/retriever с mock embeddings
 
 > 💡 **Скиллы:** `modern-python`, `python-testing-patterns`
 
 ### 3. Business tools
 
-- [ ] `app/tools/knowledge.py` — `search_knowledge_base(query, audience)` → formatted context
-- [ ] `app/tools/products.py` — `list_b2c_products()` → JSON каталог
-- [ ] `app/tools/payments.py` — `create_payment_link(product_id)`, `confirm_payment()` → update Session.payment
-- [ ] `app/tools/leads.py` — `save_lead(name, contact, product, segment)` → append `data/leads.txt`
-- [ ] Каждый tool — LangChain `@tool` decorator, typed args
-- [ ] Unit-тесты каждого tool (mock session store, temp leads file)
+- [x] `app/tools/knowledge.py` — `search_knowledge_base(query, audience)` → formatted context
+- [x] `app/tools/products.py` — `list_b2c_products()` → JSON каталог
+- [x] `app/tools/payments.py` — `create_payment_link(product_id)`, `confirm_payment()` → update Session.payment
+- [x] `app/tools/leads.py` — `save_lead(name, contact, product, segment)` → append `data/leads.txt`
+- [x] Каждый tool — LangChain `@tool` decorator, typed args
+- [x] Unit-тесты каждого tool (mock session store, temp leads file)
 
 > 💡 **Скиллы:** `python-design-patterns`, `python-testing-patterns`
 > **ADR:** [0003-mock-payments-crm](../../adrs/0003-mock-payments-crm.md)
 
 ### 4. Agent — tools + prompts
 
-- [ ] Расширить `app/agent/prompts.py`: сегментация B2B/B2C, сценарии воронки, когда вызывать tools
-- [ ] Подключить все tools к ReAct agent в `app/agent/core.py`
-- [ ] Agent определяет/фиксирует segment в Session (b2b/b2c)
-- [ ] Integration-тест: mock LLM с forced tool calls → session updated
+- [x] Расширить `app/agent/prompts.py`: сегментация B2B/B2C, сценарии воронки, когда вызывать tools
+- [x] Подключить все tools к ReAct agent в `app/agent/core.py`
+- [x] Agent определяет/фиксирует segment в Session (b2b/b2c)
+- [x] Integration-тест: mock LLM с forced tool calls → session updated
 
 > 💡 **Скиллы:** `fastapi-templates`
 > **ADR:** [0001-react-agent-core](../../adrs/0001-react-agent-core.md)
 
 ### 5. Langfuse observability
 
-- [ ] Подключить Langfuse LangChain callback handler в agent invoke
-- [ ] Metadata trace: session_id, channel, segment
-- [ ] Убедиться, что backend стартует только с валидными Langfuse keys (уже в sprint-01 config)
-- [ ] Manual check: trace в Langfuse UI после chat request
+- [x] Подключить Langfuse LangChain callback handler в agent invoke
+- [x] Metadata trace: session_id, channel, segment
+- [x] Убедиться, что backend стартует только с валидными Langfuse keys (уже в sprint-01 config)
+- [x] Manual check: trace в Langfuse UI после chat request
 
 > 💡 **Скиллы:** `sharp-edges`
 > **Ref:** [integrations.md](../../concept/integrations.md)
 
 ### 6. Chat API — tool events в SSE
 
-- [ ] Расширить SSE stream: emit `tool_start`, `tool_end` при вызовах tools (web channel)
-- [ ] Callback/hook из LangChain agent events → SSE emitter
-- [ ] Integration-тест: SSE содержит tool events при mock tool call
+- [x] Расширить SSE stream: emit `tool_start`, `tool_end` при вызовах tools (web channel)
+- [x] Callback/hook из LangChain agent events → SSE emitter
+- [x] Integration-тест: SSE содержит tool events при mock tool call
 
 > 💡 **Скиллы:** `api-design-principles`
 > **Ref:** [api-contracts.md](../../concept/api-contracts.md)
 
 ### 7. End-to-end сценарии (manual verification)
 
-- [ ] **B2C flow:** вопрос → list_b2c_products / RAG → create_payment_link → confirm_payment → save_lead
-- [ ] **B2B flow:** корпоративный запрос → RAG b2b → save_lead
-- [ ] Проверить `data/leads.txt` и Session.payment.status после flow
-- [ ] Проверить traces в Langfuse
+- [x] **B2C flow:** вопрос → list_b2c_products / RAG → create_payment_link → confirm_payment → save_lead
+- [x] **B2B flow:** корпоративный запрос → RAG b2b → save_lead
+- [x] Проверить `data/leads.txt` и Session.payment.status после flow
+- [x] Проверить traces в Langfuse
 
 > **Ref:** [user-scenarios.md](../../concept/user-scenarios.md)
 
 ### 8. CI и самопроверка
 
-- [ ] `make lint`, `make typecheck`, `make test-backend` — green
-- [ ] `make ci` — full cycle
-- [ ] Обновить sprint README: статус ✅, итог
+- [x] `make lint`, `make typecheck`, `make test-backend` — green
+- [x] `make ci` — full cycle
+- [x] Обновить sprint README: статус ✅, итог
 
 ---
 
@@ -194,4 +194,15 @@ backend/tests/
 
 ## Итог (заполняется после закрытия)
 
-—
+Backend Agent с полным business toolset и RAG:
+
+- Chroma in-memory RAG по `data/b2b/` и `data/b2c/` с filter `audience`
+- Tools: `search_knowledge_base`, `list_b2c_products`, `create_payment_link`, `confirm_payment`, `save_lead`
+- ReAct agent вызывает tools; segment и payment state обновляются в Session
+- Langfuse traces на каждый invoke (cloud или self-hosted через `LANGFUSE_HOST`)
+- SSE web channel: `tool_start`, `tool_end` при вызовах tools
+- B2C/B2B воронки проверены manual; `make ci` — 53 теста, lint + mypy green
+
+**Summary:** [summary.md](./summary.md)
+
+**Следующий спринт:** [sprint-03-web-widget](../sprint-03-web-widget/README.md) — Next.js виджет, SSE UI, Telegram handoff.
