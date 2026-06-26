@@ -12,6 +12,7 @@ TEST_ENV = {
     "OPENAI_API_KEY": "test-openai-key",
     "LANGFUSE_PUBLIC_KEY": "pk-test",
     "LANGFUSE_SECRET_KEY": "sk-test",
+    "LANGFUSE_HOST": "http://localhost:3001",
     "BACKEND_API_KEY": "test-backend-key",
     "OPENAI_MODEL": "gpt-4o",
 }
