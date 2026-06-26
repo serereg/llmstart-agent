@@ -26,7 +26,7 @@ alwaysApply: true
 
 | Слой | Выбор |
 |------|-------|
-| Runtime | Python 3.12+ |
+| Runtime | Python 3.14 (минимум `>=3.12`, см. `.python-version`) |
 | Package manager | `uv` |
 | Web framework | FastAPI + uvicorn |
 | ORM | SQLAlchemy 2.x async |

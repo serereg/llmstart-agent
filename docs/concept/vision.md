@@ -203,7 +203,7 @@ llmstart-agent/
 
 | Область | Решение |
 |---------|---------|
-| Runtime (backend) | Python 3.12+, uv |
+| Runtime (backend) | Python 3.14 (минимум `>=3.12`), uv |
 | Backend framework | FastAPI + uvicorn |
 | Agent framework | LangChain (ReAct) |
 | LLM & embeddings | OpenAI API |

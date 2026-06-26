@@ -52,7 +52,7 @@ ignore = [
 "tests/**/*.py" = ["S101", "PLR2004", "ANN", "ARG001", "ARG002", "TRY003", "EM101"]
 
 [tool.mypy]
-python_version = "3.12"
+python_version = "3.14"
 strict = true
 plugins = ["pydantic.mypy"]
 warn_return_any = true

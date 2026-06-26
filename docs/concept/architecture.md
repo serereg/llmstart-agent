@@ -61,7 +61,7 @@ flowchart TB
 
 | Компонент | Назначение | Технологии | Документация |
 |-----------|-----------|-----------|-------------|
-| **backend** | Agent Core: ReAct, tools, RAG, sessions, REST/SSE API | Python 3.12, FastAPI, LangChain, Chroma | [ADR-0001](../adrs/0001-react-agent-core.md) |
+| **backend** | Agent Core: ReAct, tools, RAG, sessions, REST/SSE API | Python 3.14 (минимум `>=3.12`), FastAPI, LangChain, Chroma | [ADR-0001](../adrs/0001-react-agent-core.md) |
 | **frontend** | Standalone виджет: чат, SSE-стриминг, reasoning/tools UI, развилка в Telegram | Next.js, Tailwind, shadcn/ui | — |
 | **bot** | Telegram-адаптер: long polling, вызов backend API, HTML-форматирование | aiogram | — |
 | **Langfuse** | Observability: traces агента | Langfuse + Postgres (Docker) | [integrations.md](integrations.md) |

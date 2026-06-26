@@ -52,7 +52,7 @@ Sprint считается завершённым, когда:
 
 ### Состав работ
 
-- [x] Инициализировать `backend/` через uv (Python 3.12+, FastAPI, uvicorn, pydantic-settings, httpx, pytest)
+- [x] Инициализировать `backend/` через uv (Python 3.14, минимум `>=3.12`; FastAPI, uvicorn, pydantic-settings, httpx, pytest)
 - [x] Создать структуру каталогов по [architecture.md](../../concept/architecture.md)
 - [x] Добавить корневой `Makefile` с целями `dev-backend`, `lint`, `format`, `typecheck`, `test`, `test-backend`, `ci`
 - [x] Реализовать `app/main.py` с lifespan и подключением роутера

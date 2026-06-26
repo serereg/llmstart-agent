@@ -137,6 +137,7 @@ Sprint считается завершённым, когда:
 | Зависимость | Откуда |
 |-------------|--------|
 | Backend scaffold, config, auth, sessions, chat API, ReAct skeleton | Sprint 01 |
+| Python runtime | 3.14 (`backend/.python-version`), минимум `>=3.12` |
 | Langfuse running locally | `make up` (docker-compose — sprint-04; до этого manual docker) |
 | LLM API credentials | `.env` (`OPENAI_API_KEY`, при необходимости `OPENAI_API_BASE`) |
 | Concept docs, ADRs | `docs/concept/`, `docs/adrs/` |
