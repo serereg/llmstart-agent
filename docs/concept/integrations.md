@@ -72,7 +72,7 @@ Backend поддерживает два режима подключения к L
 
 ### Langfuse
 
-[Документация](https://langfuse.com/docs) · [Self-hosted Docker](https://langfuse.com/self-hosting)
+[Документация](https://langfuse.com/docs) · [Langfuse Cloud](https://cloud.langfuse.com) · [Self-hosted Docker](https://langfuse.com/self-hosting)
 
 | Параметр | Значение |
 |----------|---------|
@@ -80,9 +80,9 @@ Backend поддерживает два режима подключения к L
 | Направление | Out (backend → Langfuse) |
 | Протокол | HTTPS REST (Langfuse SDK) |
 | Критичность | **MVP — обязательна** |
-| URL (локально) | `http://localhost:3001` |
+| URL (по умолчанию) | `https://cloud.langfuse.com` |
 
-**Подключение:** Langfuse Python SDK + LangChain callback handler. Langfuse поднимается self-hosted через официальный Docker-образ (latest) + Postgres (`langfuse-db`) в docker-compose.
+**Подключение:** Langfuse Python SDK + LangChain callback handler. Ключи проекта — из Langfuse Cloud UI (или self-hosted: `make up-langfuse`).
 
 **Поведение:** backend **не стартует** без валидной конфигурации Langfuse (fail fast). Traces пишутся на каждый вызов agent loop.
 
@@ -164,7 +164,7 @@ graph LR
 | `OPENAI_TIMEOUT_SEC` | backend | нет | Default: `60` |
 | `LANGFUSE_PUBLIC_KEY` | backend | да | Public key Langfuse |
 | `LANGFUSE_SECRET_KEY` | backend | да | Secret key Langfuse |
-| `LANGFUSE_HOST` | backend | да | Default: `http://localhost:3001` |
+| `LANGFUSE_HOST` | backend | да | Default: `https://cloud.langfuse.com` |
 | `TELEGRAM_BOT_TOKEN` | bot | да | Token от @BotFather |
 | `TELEGRAM_BOT_USERNAME` | frontend, bot | да | Username без `@` (deep link) |
 | `BACKEND_API_KEY` | backend, bot, frontend | да | Shared secret для `Authorization: Bearer` |

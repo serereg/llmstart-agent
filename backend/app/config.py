@@ -38,7 +38,7 @@ class Settings(BaseSettings):
         alias="OPENAI_EMBEDDING_MODEL",
     )
     openai_timeout_sec: int = Field(default=60, alias="OPENAI_TIMEOUT_SEC")
-    langfuse_host: str = Field(default="http://localhost:3001", alias="LANGFUSE_HOST")
+    langfuse_host: str = Field(default="https://cloud.langfuse.com", alias="LANGFUSE_HOST")
     cors_origins: str = Field(default="http://localhost:3000", alias="CORS_ORIGINS")
     log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"] = Field(
         default="INFO",

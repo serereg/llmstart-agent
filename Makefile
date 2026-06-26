@@ -1,10 +1,16 @@
-.PHONY: up down dev dev-backend dev-frontend dev-bot lint lint-backend lint-frontend lint-bot format format-backend format-frontend typecheck typecheck-bot test test-backend test-frontend test-bot ci
+.PHONY: up down up-langfuse down-langfuse dev dev-backend dev-frontend dev-bot lint lint-backend lint-frontend lint-bot format format-backend format-frontend typecheck typecheck-bot test test-backend test-frontend test-bot ci
 
 up:
 	docker compose up -d
 
 down:
 	docker compose down
+
+up-langfuse:
+	docker compose -f infra/langfuse/docker-compose.yml up -d
+
+down-langfuse:
+	docker compose -f infra/langfuse/docker-compose.yml down
 
 dev:
 	@echo "Starting backend, frontend, and bot (Ctrl+C stops all)..."
