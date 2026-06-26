@@ -3,11 +3,11 @@
 import json
 from collections.abc import Generator
 from datetime import UTC, datetime
+from pathlib import Path
 from uuid import UUID, uuid4
 
 import pytest
 from fastapi.testclient import TestClient
-from langchain_core.language_models.fake_chat_models import FakeListChatModel
 
 from app.agent.core import (
     FALLBACK_MESSAGE,
@@ -15,14 +15,19 @@ from app.agent.core import (
     create_agent_service,
     get_agent_service,
 )
+from app.config import get_settings
+from app.rag.indexer import build_chroma_index
+from app.rag.retriever import KnowledgeRetriever
 from app.sessions.models import Channel, Message, MessageRole
 from app.sessions.store import SessionStore, get_session_store
-from tests.fakes import FailingChatModel
+from tests.fakes import FailingChatModel, ToolCapableFakeChatModel
+from tests.test_rag import FakeEmbeddings
 
 VALID_AUTH_HEADER = {"Authorization": "Bearer test-backend-key"}
 CHAT_URL = "/api/v1/chat"
 SESSIONS_URL = "/api/v1/sessions"
 MOCK_REPLY = "Рекомендую курс agents для старта."
+DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
 
 @pytest.fixture
@@ -31,9 +36,19 @@ def store() -> SessionStore:
 
 
 @pytest.fixture
-def agent_service() -> AgentService:
-    llm = FakeListChatModel(responses=[MOCK_REPLY])
-    return create_agent_service(llm)
+def retriever() -> KnowledgeRetriever:
+    return KnowledgeRetriever(build_chroma_index(FakeEmbeddings(), DATA_DIR))
+
+
+@pytest.fixture
+def agent_service(store: SessionStore, retriever: KnowledgeRetriever) -> AgentService:
+    llm = ToolCapableFakeChatModel(responses=[MOCK_REPLY])
+    return create_agent_service(
+        llm,
+        store=store,
+        retriever=retriever,
+        settings=get_settings(),
+    )
 
 
 @pytest.fixture
@@ -249,13 +264,19 @@ def test_sse_event_format(client_with_store: TestClient) -> None:
     assert text.endswith("\n\n")
 
 
-def test_openai_error_returns_fallback_telegram(store: SessionStore) -> None:
+def test_openai_error_returns_fallback_telegram(
+    store: SessionStore,
+    retriever: KnowledgeRetriever,
+) -> None:
     from app.main import create_app  # noqa: PLC0415
 
     app = create_app()
     app.dependency_overrides[get_session_store] = lambda: store
     app.dependency_overrides[get_agent_service] = lambda: create_agent_service(
         FailingChatModel(responses=[MOCK_REPLY]),
+        store=store,
+        retriever=retriever,
+        settings=get_settings(),
     )
 
     with TestClient(app) as client:
@@ -273,13 +294,19 @@ def test_openai_error_returns_fallback_telegram(store: SessionStore) -> None:
     assert body["error"] is True
 
 
-def test_openai_error_returns_fallback_sse(store: SessionStore) -> None:
+def test_openai_error_returns_fallback_sse(
+    store: SessionStore,
+    retriever: KnowledgeRetriever,
+) -> None:
     from app.main import create_app  # noqa: PLC0415
 
     app = create_app()
     app.dependency_overrides[get_session_store] = lambda: store
     app.dependency_overrides[get_agent_service] = lambda: create_agent_service(
         FailingChatModel(responses=[MOCK_REPLY]),
+        store=store,
+        retriever=retriever,
+        settings=get_settings(),
     )
 
     with TestClient(app) as client:

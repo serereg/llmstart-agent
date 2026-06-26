@@ -6,11 +6,15 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.router import api_router
 from app.config import get_settings
+from app.observability.langfuse import get_langfuse_client
+from app.rag.store import init_rag_index
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
-    get_settings()
+    settings = get_settings()
+    get_langfuse_client()
+    init_rag_index(settings)
     yield
 
 

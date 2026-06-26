@@ -122,7 +122,7 @@ async def agent_sse_with_persist(
 ) -> AsyncIterator[tuple[str, dict[str, object]]]:
     """Stream agent SSE events and persist the assistant reply on completion."""
     reply = ""
-    async for event_type, data in agent.stream_sse(user_message, history, session.session_id):
+    async for event_type, data in agent.stream_sse(user_message, history, session):
         if event_type == "done":
             reply = str(data["reply"])
         yield event_type, data
@@ -150,7 +150,7 @@ async def chat(
         history = agent_history(session, is_handoff=False)
 
     if body.channel == "telegram":
-        result = await agent.invoke(user_message, history)
+        result = await agent.invoke(user_message, history, session)
         await save_assistant_message(store, session.session_id, result.reply)
         return ChatResponse(
             session_id=session.session_id,

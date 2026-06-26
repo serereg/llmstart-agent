@@ -1,0 +1,26 @@
+[
+  {
+    "id": "agents",
+    "name": "Agents — разработка AI-агентов",
+    "description": "8-недельный курс по production-grade AI-агентам: LangChain, ReAct, tools, RAG, observability.",
+    "price_rub": 29900,
+    "duration_weeks": 8,
+    "level": "intermediate"
+  },
+  {
+    "id": "llm-fundamentals",
+    "name": "LLM Fundamentals",
+    "description": "Вводный курс по LLM: трансформеры, промпт-инжиниринг, OpenAI API.",
+    "price_rub": 14900,
+    "duration_weeks": 4,
+    "level": "beginner"
+  },
+  {
+    "id": "rag-workshop",
+    "name": "RAG Workshop",
+    "description": "Двухнедельный практикум: chunking, embeddings, vector stores, evaluation.",
+    "price_rub": 19900,
+    "duration_weeks": 2,
+    "level": "intermediate"
+  }
+]

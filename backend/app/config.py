@@ -50,6 +50,26 @@ class Settings(BaseSettings):
     def cors_origins_list(self) -> list[str]:
         return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
 
+    @property
+    def data_dir(self) -> Path:
+        return REPO_ROOT / "data"
+
+    @property
+    def b2b_data_dir(self) -> Path:
+        return self.data_dir / "b2b"
+
+    @property
+    def b2c_data_dir(self) -> Path:
+        return self.data_dir / "b2c"
+
+    @property
+    def products_file(self) -> Path:
+        return self.b2c_data_dir / "products.json"
+
+    @property
+    def leads_file(self) -> Path:
+        return self.data_dir / "leads.txt"
+
 
 def _format_settings_error(exc: ValidationError) -> str:
     missing_vars: list[str] = []
