@@ -1,4 +1,18 @@
-.PHONY: dev-backend dev-frontend lint lint-frontend format format-frontend typecheck test test-backend test-frontend ci
+.PHONY: up down dev dev-backend dev-frontend dev-bot lint lint-backend lint-frontend lint-bot format format-backend format-frontend typecheck typecheck-bot test test-backend test-frontend test-bot ci
+
+up:
+	docker compose up -d
+
+down:
+	docker compose down
+
+dev:
+	@echo "Starting backend, frontend, and bot (Ctrl+C stops all)..."
+	trap 'kill 0' EXIT INT TERM; \
+	$(MAKE) dev-backend & \
+	$(MAKE) dev-frontend & \
+	$(MAKE) dev-bot & \
+	wait
 
 dev-backend:
 	cd backend && uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
@@ -6,7 +20,10 @@ dev-backend:
 dev-frontend:
 	cd frontend && pnpm dev
 
-lint: lint-backend lint-frontend
+dev-bot:
+	cd bot && uv run python -m bot.main
+
+lint: lint-backend lint-frontend lint-bot
 
 lint-backend:
 	cd backend && uv run ruff check .
@@ -14,7 +31,10 @@ lint-backend:
 lint-frontend:
 	cd frontend && pnpm lint
 
-format: format-backend format-frontend
+lint-bot:
+	cd bot && uv run ruff check .
+
+format: format-backend format-frontend format-bot
 
 format-backend:
 	cd backend && uv run ruff format .
@@ -22,10 +42,18 @@ format-backend:
 format-frontend:
 	cd frontend && pnpm format
 
-typecheck:
+format-bot:
+	cd bot && uv run ruff format .
+
+typecheck: typecheck-backend typecheck-bot
+
+typecheck-backend:
 	cd backend && uv run mypy app tests
 
-test: test-backend test-frontend
+typecheck-bot:
+	cd bot && uv run mypy bot tests
+
+test: test-backend test-frontend test-bot
 
 test-backend:
 	cd backend && uv run pytest -v
@@ -33,4 +61,7 @@ test-backend:
 test-frontend:
 	cd frontend && pnpm test
 
-ci: lint typecheck test-backend lint-frontend test-frontend
+test-bot:
+	cd bot && uv run pytest -v
+
+ci: lint typecheck test-backend lint-frontend test-frontend test-bot
