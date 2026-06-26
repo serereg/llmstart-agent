@@ -2,9 +2,9 @@
 
 > **Версия roadmap:** v0.1 — MVP
 > **Roadmap:** [../../roadmap.md](../../roadmap.md)
-> **Статус:** 📋 Planned
-> **Открыт:** —
-> **Закрыт:** —
+> **Статус:** ✅ Done
+> **Открыт:** 2026-06-26
+> **Закрыт:** 2026-06-26
 
 ---
 
@@ -62,90 +62,90 @@ Sprint считается завершённым, когда:
 
 ### 1. Frontend scaffold
 
-- [ ] Инициализировать `frontend/` через pnpm: Next.js 16, React 19, Tailwind 4, TypeScript strict
-- [ ] Подключить shadcn/ui (Button, Input, ScrollArea, Collapsible, Card)
-- [ ] Структура каталогов по [architecture.md](../../concept/architecture.md): `app/`, `components/chat/`, `lib/`
-- [ ] Добавить в корневой `Makefile`: `dev-frontend`, `lint-frontend`, `test-frontend`, `format-frontend`
-- [ ] Smoke-тест: страница рендерится
+- [x] Инициализировать `frontend/` через pnpm: Next.js 16, React 19, Tailwind 4, TypeScript strict
+- [x] Подключить shadcn/ui (Button, Input, ScrollArea, Collapsible, Card)
+- [x] Структура каталогов по [architecture.md](../../concept/architecture.md): `app/`, `components/chat/`, `lib/`
+- [x] Добавить в корневой `Makefile`: `dev-frontend`, `lint-frontend`, `test-frontend`, `format-frontend`
+- [x] Smoke-тест: страница рендерится
 
 > 💡 **Скиллы:** `nextjs-app-router-patterns`, `shadcn`, `modern-python` (только Makefile-цели)
 
 ### 2. Types и SSE client
 
-- [ ] `lib/types.ts` — ChatRequest, SSE events (`ReasoningEvent`, `ToolStartEvent`, `ToolEndEvent`, `TokenEvent`, `DoneEvent`, `ErrorEvent`)
-- [ ] `lib/sse-parser.ts` — парсинг `event:` / `data:` из ReadableStream
-- [ ] Unit-тесты parser: success stream, error stream, partial chunks
+- [x] `lib/types.ts` — ChatRequest, SSE events (`ReasoningEvent`, `ToolStartEvent`, `ToolEndEvent`, `TokenEvent`, `DoneEvent`, `ErrorEvent`)
+- [x] `lib/sse-parser.ts` — парсинг `event:` / `data:` из ReadableStream
+- [x] Unit-тесты parser: success stream, error stream, partial chunks
 
 > 💡 **Скиллы:** `vercel-react-best-practices`
 > **Ref:** [api-contracts.md](../../concept/api-contracts.md)
 
 ### 3. Server-side API proxy
 
-- [ ] `app/api/chat/route.ts` — Route Handler: принимает `{session_id, message}`, добавляет `channel: web`, проксирует в backend с `Authorization: Bearer`
-- [ ] Стриминг ответа backend → клиент без буферизации (pass-through SSE)
-- [ ] Env: `BACKEND_URL`, `BACKEND_API_KEY` — только server-side (`process.env`, не `NEXT_PUBLIC_`)
-- [ ] Обработка 401/404/422 → JSON error для UI
+- [x] `app/api/chat/route.ts` — Route Handler: принимает `{session_id, message}`, добавляет `channel: web`, проксирует в backend с `Authorization: Bearer`
+- [x] Стриминг ответа backend → клиент без буферизации (pass-through SSE)
+- [x] Env: `BACKEND_URL`, `BACKEND_API_KEY` — только server-side (`process.env`, не `NEXT_PUBLIC_`)
+- [x] Обработка 401/404/422 → JSON error для UI
 
 > 💡 **Скиллы:** `nextjs-app-router-patterns`, `api-design-principles`, `sharp-edges`
 
 ### 4. Session management
 
-- [ ] `lib/session.ts` — get/set `session_id` в localStorage
-- [ ] При mount: если есть сохранённый id → `GET /api/sessions/[id]` (proxy) для restore истории
-- [ ] `app/api/sessions/[id]/route.ts` — proxy к `GET /api/v1/sessions/{id}`
+- [x] `lib/session.ts` — get/set `session_id` в localStorage
+- [x] При mount: если есть сохранённый id → `GET /api/sessions/[id]` (proxy) для restore истории
+- [x] `app/api/sessions/[id]/route.ts` — proxy к `GET /api/v1/sessions/{id}`
 
 > 💡 **Скиллы:** `vercel-react-best-practices`
 
 ### 5. Chat UI components
 
-- [ ] `components/chat/ChatWindow.tsx` — orchestrator: input, send, streaming state
-- [ ] `components/chat/MessageList.tsx` — user/assistant bubbles, markdown render (assistant)
-- [ ] `components/chat/ChatInput.tsx` — textarea + send button, disabled while streaming
-- [ ] `app/page.tsx` — layout: чат + боковая/нижняя панель AgentActivity
-- [ ] Стилизация: чистый dev-виджет, пригодный для ADM-2 (демо на занятии)
+- [x] `components/chat/ChatWindow.tsx` — orchestrator: input, send, streaming state
+- [x] `components/chat/MessageList.tsx` — user/assistant bubbles, markdown render (assistant)
+- [x] `components/chat/ChatInput.tsx` — textarea + send button, disabled while streaming
+- [x] `app/page.tsx` — layout: чат + боковая/нижняя панель AgentActivity
+- [x] Стилизация: чистый dev-виджет, пригодный для ADM-2 (демо на занятии)
 
 > 💡 **Скиллы:** `frontend-design`, `shadcn`, `web-design-guidelines`
 
 ### 6. AgentActivity panel
 
-- [ ] `components/chat/AgentActivity.tsx` — список reasoning steps и tool invocations
-- [ ] `tool_start` → card с name + args; `tool_end` → result (truncate long JSON)
-- [ ] Collapsible: свёрнута по умолчанию на mobile, развёрнута на desktop
-- [ ] Очистка activity при новом сообщении пользователя
+- [x] `components/chat/AgentActivity.tsx` — список reasoning steps и tool invocations
+- [x] `tool_start` → card с name + args; `tool_end` → result (truncate long JSON)
+- [x] Collapsible: свёрнута по умолчанию на mobile, развёрнута на desktop
+- [x] Очистка activity при новом сообщении пользователя
 
 > 💡 **Скиллы:** `vercel-react-best-practices`
 
 ### 7. Telegram handoff
 
-- [ ] `components/chat/TelegramHandoff.tsx` — кнопка «Перейти в Telegram»
-- [ ] Deep link: `https://t.me/${TELEGRAM_BOT_USERNAME}?start=session_${sessionId}`
-- [ ] Кнопка disabled пока нет `session_id` (до первого `done`)
-- [ ] Env `TELEGRAM_BOT_USERNAME` — server component или API route (не в client bundle)
+- [x] `components/chat/TelegramHandoff.tsx` — кнопка «Перейти в Telegram»
+- [x] Deep link: `https://t.me/${TELEGRAM_BOT_USERNAME}?start=session_${sessionId}`
+- [x] Кнопка disabled пока нет `session_id` (до первого `done`)
+- [x] Env `TELEGRAM_BOT_USERNAME` — server component или API route (не в client bundle)
 
 > 💡 **Скиллы:** `nextjs-app-router-patterns`
 > **Ref:** [user-scenarios.md](../../concept/user-scenarios.md) — B2C-6
 
 ### 8. Error handling и UX
 
-- [ ] SSE `error` event → toast/banner «Сервис временно недоступен»
-- [ ] Network failure → понятное сообщение, retry
-- [ ] Пустой input → disabled send
-- [ ] Max message length 4000 — client-side validation
+- [x] SSE `error` event → toast/banner «Сервис временно недоступен»
+- [x] Network failure → понятное сообщение, retry
+- [x] Пустой input → disabled send
+- [x] Max message length 4000 — client-side validation
 
 ### 9. End-to-end сценарии (manual verification)
 
-- [ ] **B2C-1…B2C-5:** вопрос → продукт → оплата → лид через виджет
-- [ ] **B2B-1…B2B-3:** корпоративный запрос → RAG → лид
-- [ ] **B2C-6:** handoff link генерируется с корректным session_id
-- [ ] **ADM-2:** reasoning/tools видны в реальном времени на проекторе
+- [x] **B2C-1…B2C-5:** вопрос → продукт → оплата → лид через виджет
+- [x] **B2B-1…B2B-3:** корпоративный запрос → RAG → лид
+- [x] **B2C-6:** handoff link генерируется с корректным session_id
+- [x] **ADM-2:** reasoning/tools видны в реальном времени на проекторе
 
 > **Ref:** [user-scenarios.md](../../concept/user-scenarios.md)
 
 ### 10. CI и самопроверка
 
-- [ ] `make lint-frontend`, `make test-frontend` — green
-- [ ] `make ci` — backend + frontend
-- [ ] Обновить sprint README: статус ✅, итог
+- [x] `make lint-frontend`, `make test-frontend` — green
+- [x] `make ci` — backend + frontend
+- [x] Обновить sprint README: статус ✅, итог
 
 ---
 
@@ -215,6 +215,8 @@ Makefile                   # + dev-frontend, lint-frontend, test-frontend
 
 ## Итог (заполняется после закрытия)
 
-_Не заполнено._
+Standalone Next.js виджет на `:3000`: чат с SSE-стримингом, панель AgentActivity (reasoning + tools), восстановление сессии из localStorage, кнопка handoff в Telegram. API-ключ backend — только в server-side Route Handlers.
+
+**Summary:** [summary.md](./summary.md)
 
 **Следующий спринт:** [sprint-04-telegram-bot](../sprint-04-telegram-bot/README.md) — aiogram бот, docker-compose, `make dev`, E2E.

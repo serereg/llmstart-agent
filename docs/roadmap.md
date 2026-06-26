@@ -30,7 +30,7 @@
 **Ключевые результаты:**
 - [x] Диалог B2C end-to-end: вопрос → продукт → мок-оплата → лид (backend API)
 - [x] Диалог B2B: RAG по b2b-базе → лид (backend API)
-- [ ] Web-виджет со SSE + reasoning/tools
+- [x] Web-виджет со SSE + reasoning/tools
 - [ ] Telegram-бот + handoff из виджета
 - [x] Traces в Langfuse
 - [ ] `make dev` поднимает весь стек локально
@@ -41,7 +41,7 @@
 |---|--------|------|--------|----------|
 | 01 | backend-core | FastAPI, config, sessions, health, auth, ReAct skeleton | ✅ | [sprint-01](sprints/sprint-01-backend-core/README.md) |
 | 02 | agent-rag | Tools, RAG (Chroma), Langfuse, воронка (products, payment, leads) | ✅ | [sprint-02](sprints/sprint-02-agent-rag/README.md) |
-| 03 | web-widget | Next.js, SSE, reasoning/tools UI, Telegram handoff | 📋 | [sprint-03](sprints/sprint-03-web-widget/README.md) |
+| 03 | web-widget | Next.js, SSE, reasoning/tools UI, Telegram handoff | ✅ | [sprint-03](sprints/sprint-03-web-widget/README.md) |
 | 04 | telegram-bot | aiogram, long polling, handoff, docker-compose, E2E | 📋 | [sprint-04](sprints/sprint-04-telegram-bot/README.md) |
 
 ---
@@ -100,3 +100,4 @@
 |------|-----------|
 | 2026-06-21 | Создан roadmap (онбординг concept → roadmap) |
 | 2026-06-26 | Sprint 02 (agent-rag) закрыт: tools, RAG, Langfuse, воронка B2C/B2B |
+| 2026-06-26 | Sprint 03 (web-widget) закрыт: Next.js виджет, SSE UI, session restore, Telegram handoff link |
