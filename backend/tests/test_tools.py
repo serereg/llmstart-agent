@@ -59,7 +59,7 @@ async def tool_context(
 
 @pytest.mark.asyncio
 async def test_list_b2c_products_returns_catalog(tool_context: ToolContext) -> None:
-    result = list_b2c_products.invoke({})
+    result = await list_b2c_products.ainvoke({})
     products = json.loads(result)
 
     assert len(products) >= 3

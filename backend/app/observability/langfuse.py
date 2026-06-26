@@ -22,11 +22,24 @@ def get_langfuse_client() -> Langfuse:
     )
 
 
+def shutdown_langfuse_client() -> None:
+    """Flush pending traces and shut down the Langfuse client."""
+    if os.environ.get("PYTEST_CURRENT_TEST") is not None:
+        return
+    get_langfuse_client().shutdown()
+
+
 def create_langfuse_handler() -> CallbackHandler:
     """Create a LangChain callback handler for a single agent invocation."""
-    settings = get_settings()
     get_langfuse_client()
-    return CallbackHandler(public_key=settings.langfuse_public_key)
+    return CallbackHandler()
+
+
+def _build_langfuse_tags(channel: str, segment: str | None) -> list[str]:
+    tags = [f"channel:{channel}"]
+    if segment is not None:
+        tags.append(f"segment:{segment}")
+    return tags
 
 
 def build_invoke_config(
@@ -37,8 +50,9 @@ def build_invoke_config(
 ) -> dict[str, object]:
     """Build RunnableConfig with Langfuse callback and trace metadata."""
     metadata: dict[str, object] = {
-        "session_id": session_id,
+        "langfuse_session_id": session_id,
         "channel": channel,
+        "langfuse_tags": _build_langfuse_tags(channel, segment),
     }
     if segment is not None:
         metadata["segment"] = segment

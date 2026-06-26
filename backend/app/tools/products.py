@@ -1,5 +1,6 @@
 """list_b2c_products tool — B2C product catalog."""
 
+import asyncio
 import json
 from pathlib import Path
 
@@ -21,8 +22,9 @@ def load_products_catalog(products_file: Path) -> list[dict[str, object]]:
 
 
 @tool
-def list_b2c_products() -> str:
+async def list_b2c_products() -> str:
     """Return the catalog of B2C courses and products as JSON."""
     ctx = get_tool_context()
-    products = load_products_catalog(Path(ctx.products_file_path))
+    products_path = Path(ctx.products_file_path)
+    products = await asyncio.to_thread(load_products_catalog, products_path)
     return json.dumps(products, ensure_ascii=False, indent=2)
