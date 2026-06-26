@@ -14,6 +14,8 @@ credentials.json
 service-account.json
 *-secret.json
 *-credentials.json
+# Cursor MCP — local config may embed API keys / Basic auth
+.cursor/mcp.json
 
 # ============================
 # Python
