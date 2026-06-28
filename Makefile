@@ -1,4 +1,4 @@
-.PHONY: up down up-langfuse down-langfuse dev dev-backend dev-frontend dev-bot lint lint-backend lint-frontend lint-bot format format-backend format-frontend typecheck typecheck-bot test test-backend test-frontend test-bot ci
+.PHONY: up down up-langfuse down-langfuse upload-dataset upload-dataset-reload upload-dataset-local dev dev-backend dev-frontend dev-bot lint lint-backend lint-frontend lint-bot format format-backend format-frontend typecheck typecheck-bot test test-backend test-frontend test-bot ci
 
 up:
 	docker compose up -d
@@ -11,6 +11,15 @@ up-langfuse:
 
 down-langfuse:
 	docker compose -f infra/langfuse/docker-compose.yml down
+
+upload-dataset:
+	cd backend && uv run python ../scripts/upload_langfuse_dataset.py
+
+upload-dataset-reload:
+	cd backend && uv run python ../scripts/upload_langfuse_dataset.py --reload
+
+upload-dataset-local:
+	cd backend && uv run python ../scripts/upload_langfuse_dataset.py --host http://localhost:3001 --reload
 
 dev:
 	@echo "Starting backend, frontend, and bot (Ctrl+C stops all)..."

@@ -35,12 +35,20 @@ make up-langfuse
 
 Логин по умолчанию: `admin@local.dev` / `langfuse-local-dev`.
 
-Ключи для `.env`:
+Ключи для корневого `.env` — создайте в UI: **Project Settings → API Keys**
+(`LANGFUSE_INIT_*` из docker-compose действуют только при первом старте на пустой БД):
 
 ```env
-LANGFUSE_PUBLIC_KEY=pk-lf-llmstart-local
-LANGFUSE_SECRET_KEY=sk-lf-llmstart-local
+LANGFUSE_PUBLIC_KEY=pk-lf-...
+LANGFUSE_SECRET_KEY=sk-lf-...
 LANGFUSE_HOST=http://localhost:3001
+```
+
+Загрузка validation dataset v1:
+
+```bash
+make upload-dataset          # upsert items по id
+make upload-dataset-reload   # удалить все items и загрузить заново
 ```
 
 Остановка: `make down-langfuse`.
