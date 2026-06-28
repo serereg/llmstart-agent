@@ -250,4 +250,19 @@
 | G7 | 4 | defer, follow-up, re-engage |
 | G8 | 2 | B2B coordinator |
 
-**Пробелы (ветка 2 — синтетика):** T6 checkout/lead, цена, сравнение продуктов, B2B disambiguation, конверсия.
+**Пробелы (ветка 2 — синтетика):** закрыты → `datasets/v1/synthesized/` (36 записей, 2026-06-28).
+
+### Покрытие синтеза (v1)
+
+| Группа | Записей | Примечание |
+|--------|---------|------------|
+| G1 | 7 | FAQ формат/расписание KB-продуктов |
+| G2 | 8 | fit, цена, сравнение, consultation |
+| G3 | 5 | возражения время/цена/формат |
+| G4 | 1 | syllabus preview |
+| G5 | 3 | misfit → альтернатива |
+| G6 | 2 | фидбэк, roadmap |
+| G7 | 8 | T6 checkout/confirm/save_lead/funnel |
+| G8 | 2 | B2B team + disambiguation |
+
+**Combined v1 (extracted + synthesized):** 60 записей → `datasets/v1/all.jsonl`. Release ✅ 2026-06-28. Summary: [summary.md](./summary.md).
