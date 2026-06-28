@@ -15,7 +15,9 @@ from dotenv import load_dotenv
 from langfuse import Langfuse
 
 ROOT = Path(__file__).resolve().parents[1]
+LANGFUSE_LOCAL_ENV = ROOT / "infra" / "langfuse" / ".env"
 DEFAULT_JSONL = ROOT / "datasets" / "v1" / "all.jsonl"
+DEFAULT_LOCAL_HOST = "http://localhost:3001"
 DEFAULT_DATASET_NAME = "llmstart-agent-v1"
 DEFAULT_DESCRIPTION = (
     "LLMStart agent validation dataset v1 — hybrid extraction + synthesis (60 records)."
@@ -51,6 +53,19 @@ def load_records(path: Path) -> list[dict[str, Any]]:
         msg = f"{path}: no records found"
         raise UploadError(msg)
     return records
+
+
+def apply_local_langfuse_env() -> None:
+    """Load self-hosted credentials from infra/langfuse/.env (headless init keys)."""
+    if LANGFUSE_LOCAL_ENV.exists():
+        load_dotenv(LANGFUSE_LOCAL_ENV, override=True)
+    public_key = os.environ.get("LANGFUSE_INIT_PROJECT_PUBLIC_KEY")
+    secret_key = os.environ.get("LANGFUSE_INIT_PROJECT_SECRET_KEY")
+    if public_key:
+        os.environ["LANGFUSE_PUBLIC_KEY"] = public_key
+    if secret_key:
+        os.environ["LANGFUSE_SECRET_KEY"] = secret_key
+    os.environ["LANGFUSE_HOST"] = DEFAULT_LOCAL_HOST
 
 
 def build_client(host: str | None) -> Langfuse:
@@ -190,12 +205,24 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Delete existing dataset items before upload (full replace)",
     )
+    parser.add_argument(
+        "--local",
+        action="store_true",
+        help=(
+            "Use self-hosted Langfuse at localhost:3001 with keys from "
+            "infra/langfuse/.env (LANGFUSE_INIT_PROJECT_*)."
+        ),
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     load_dotenv(ROOT / ".env")
     args = parse_args()
+    if args.local:
+        apply_local_langfuse_env()
+        if args.host is None:
+            args.host = DEFAULT_LOCAL_HOST
 
     jsonl_path = args.file if args.file.is_absolute() else ROOT / args.file
     if not jsonl_path.exists():

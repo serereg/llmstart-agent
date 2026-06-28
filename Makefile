@@ -19,7 +19,7 @@ upload-dataset-reload:
 	cd backend && uv run python ../scripts/upload_langfuse_dataset.py --reload
 
 upload-dataset-local:
-	cd backend && uv run python ../scripts/upload_langfuse_dataset.py --host http://localhost:3001 --reload
+	cd backend && uv run python ../scripts/upload_langfuse_dataset.py --local --reload
 
 dev:
 	@echo "Starting backend, frontend, and bot (Ctrl+C stops all)..."

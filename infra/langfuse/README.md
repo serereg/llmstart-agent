@@ -59,8 +59,9 @@ make up-langfuse
 Загрузка validation dataset v1:
 
 ```bash
-make upload-dataset          # upsert items по id
-make upload-dataset-reload   # удалить все items и загрузить заново
+make upload-dataset-local   # self-hosted: keys from infra/langfuse/.env, full reload
+make upload-dataset         # upsert via LANGFUSE_* in repo root .env
+make upload-dataset-reload  # full reload via repo root .env
 ```
 
 Остановка: `make down-langfuse`.
