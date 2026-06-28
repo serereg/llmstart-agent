@@ -35,14 +35,26 @@ make up-langfuse
 
 Логин по умолчанию: `admin@local.dev` / `langfuse-local-dev`.
 
-Ключи для корневого `.env` — создайте в UI: **Project Settings → API Keys**
-(`LANGFUSE_INIT_*` из docker-compose действуют только при первом старте на пустой БД):
+Headless init (Langfuse v3) требует **`LANGFUSE_INIT_ORG_ID`** и **`LANGFUSE_INIT_PROJECT_ID`** —
+без них остальные `LANGFUSE_INIT_*` игнорируются (см. логи: `Langfuse Init ... will be ignored`).
+
+После `make up-langfuse` на **пустой** БД скопируйте в корневой `.env`:
 
 ```env
-LANGFUSE_PUBLIC_KEY=pk-lf-...
-LANGFUSE_SECRET_KEY=sk-lf-...
+LANGFUSE_PUBLIC_KEY=pk-lf-llmstart-local
+LANGFUSE_SECRET_KEY=sk-lf-llmstart-local
 LANGFUSE_HOST=http://localhost:3001
 ```
+
+Если init не сработал (ключи 401) — полный reset:
+
+```bash
+make down-langfuse
+docker compose -f infra/langfuse/docker-compose.yml down -v
+make up-langfuse
+```
+
+Логин UI: `admin@local.dev` / пароль из `infra/langfuse/.env` (`LANGFUSE_INIT_USER_PASSWORD`).
 
 Загрузка validation dataset v1:
 
