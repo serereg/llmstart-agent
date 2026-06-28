@@ -141,6 +141,11 @@ def delete_items(client: Langfuse, item_ids: list[str]) -> int:
     return deleted
 
 
+def langfuse_item_id(dataset_name: str, record_id: str) -> str:
+    """Langfuse dataset item ids are unique per project, not per dataset."""
+    return f"{dataset_name}::{record_id}"
+
+
 def upload_items(
     client: Langfuse,
     *,
@@ -149,12 +154,14 @@ def upload_items(
 ) -> int:
     uploaded = 0
     for record in records:
+        metadata = dict(record["metadata"])
+        metadata["record_id"] = record["id"]
         client.create_dataset_item(
             dataset_name=dataset_name,
-            id=record["id"],
+            id=langfuse_item_id(dataset_name, record["id"]),
             input=record["input"],
             expected_output=record["expected_output"],
-            metadata=record["metadata"],
+            metadata=metadata,
         )
         uploaded += 1
     return uploaded

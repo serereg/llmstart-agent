@@ -7,8 +7,8 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 Segment = Literal["b2c", "b2b"]
-DatasetType = Literal["T1", "T2", "T3", "T4", "T5", "T6"]
-TaxonomyGroup = Literal["G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8"]
+DatasetType = Literal["T1", "T2", "T3", "T4", "T5", "T6", "T7"]
+TaxonomyGroup = Literal["G1", "G2", "G3", "G4", "G5", "G6", "G7", "G8", "G9"]
 SourceBranch = Literal["extraction", "synthesis"]
 GroundTruthMode = Literal["expert_dialog", "kb_rag", "rubric", "tool_call"]
 
@@ -45,7 +45,7 @@ class RecordMetadata(BaseModel):
     segment: Segment
     taxonomy: TaxonomyRef
     dataset_type: DatasetType
-    abilities: list[str] = Field(description="S1..S8 из dataset-plan")
+    abilities: list[str] = Field(description="S1..S9 из dataset-plan")
     ground_truth_mode: GroundTruthMode
     product_ids: list[str] = Field(default_factory=list)
     expected_tools: list[ExpectedToolCall] = Field(default_factory=list)

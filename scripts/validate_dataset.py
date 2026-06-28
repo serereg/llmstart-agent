@@ -28,8 +28,10 @@ def validate_file(path: Path) -> list[str]:
 
 def main() -> int:
     v1 = ROOT / "datasets" / "v1"
+    v2 = ROOT / "datasets" / "v2"
     extracted = v1 / "extracted"
     synthesized = v1 / "synthesized"
+    guardrails = v2 / "guardrails"
     files = [
         v1 / "all.jsonl",
         v1 / "b2c.jsonl",
@@ -40,6 +42,10 @@ def main() -> int:
         synthesized / "all.jsonl",
         synthesized / "b2c.jsonl",
         synthesized / "b2b.jsonl",
+        v2 / "all.jsonl",
+        v2 / "b2c.jsonl",
+        v2 / "b2b.jsonl",
+        guardrails / "all.jsonl",
     ]
     all_errors: list[str] = []
     for path in files:
